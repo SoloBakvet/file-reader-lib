@@ -44,8 +44,7 @@ public class XmlFile(string filePath) : TextFile(filePath)
             {
                 xmlWriter.Formatting = Formatting.Indented;
                 fileContent.WriteTo(xmlWriter);
-                string str = sw.ToString();
-                Console.WriteLine(str);
+                Console.WriteLine(sw.ToString());
             }
         }
     }
