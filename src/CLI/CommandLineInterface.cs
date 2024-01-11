@@ -22,7 +22,7 @@ public class CommandLineInterface
                 string? filePath = Console.ReadLine();
                 if (filePath is not null && filePath is not "")
                 {
-                    TextFile file = new(filePath);
+                    XmlFile file = new(filePath);
                     file.PrintContent();
                 }
                 else
