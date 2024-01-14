@@ -22,16 +22,24 @@ public class CommandLineInterface
                 string? filePath = Console.ReadLine();
                 if (filePath is not null && filePath is not "")
                 {
-                    XmlFile file = new(filePath);
+                    string fileExtension = Path.GetExtension(filePath);
+                    Console.WriteLine(fileExtension);
+                    Core.File file = CreateFile(filePath,fileExtension);
                     file.PrintContent();
                 }
                 else
                 {
                     Console.WriteLine("Empty or invalid file path provided.");
+                    continue;
                 }
+
             }
             catch (FileNotFoundException){
                 Console.WriteLine("File was not found.");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("File type is not supported");
             }
             catch
             {
@@ -42,4 +50,28 @@ public class CommandLineInterface
             }
         }
     }
+
+    /// <summary>
+    /// Creates a file object depending on the file extension.
+    /// </summary>
+    /// <param name="filePath"> Path to the location of the file. </param>
+    /// <param name="fileExtension"> Extension type of the file. </param>
+    /// <returns> A file object.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private static Core.File CreateFile(string filePath, string fileExtension)
+    {
+        switch (fileExtension)
+        {
+            case ".txt":
+                return new TextFile(filePath);
+
+            case ".xml":
+                return new XmlFile(filePath);
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(fileExtension), "File type is not supported.");
+
+        }
+    }
+
 }
