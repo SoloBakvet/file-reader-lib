@@ -1,4 +1,6 @@
 ﻿using FileReaderLib.Core;
+using FileReaderLib.Encryption;
+using System.Security;
 
 namespace FileReaderLib.CLI;
 
@@ -24,6 +26,9 @@ public class CommandLineInterface
                 {
                     string fileExtension = Path.GetExtension(filePath);
                     Core.File file = CreateFile(filePath,fileExtension);
+                    SelectAndSetFileEncryption(file);
+                    SelectAndSetRole(file);
+                    
                     file.PrintContent();
                 }
                 else
@@ -35,6 +40,10 @@ public class CommandLineInterface
             }
             catch (FileNotFoundException){
                 Console.WriteLine("File was not found.");
+            }
+            catch (SecurityException)
+            {
+                Console.WriteLine("User has no access to the file.");
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -72,5 +81,53 @@ public class CommandLineInterface
 
         }
     }
+    /// <summary>
+    /// Lets the user select a encryption strategy for a file.
+    /// </summary>
+    /// <param name="file"> File object for which a encryption strategy will be chosen. </param>
+    private static void SelectAndSetFileEncryption(Core.File file)
+    {
+        while (true)
+        {
+            Console.WriteLine("Please choose if you want to enable encryption:");
+            Console.WriteLine("[0] No encryption");
+            Console.WriteLine("[1] Reverse data encryption");
+            Console.WriteLine("[2] AES encryption");
+            string? encryptionNumber = Console.ReadLine();
 
+            switch (encryptionNumber)
+            {
+                case "0":
+                    file.SetEncryptionStrategy(null);
+                    return;
+
+                case "1":
+                    file.SetEncryptionStrategy(new ReverseEncryptionStrategy());
+                    return;
+
+                case "2":
+                    file.SetEncryptionStrategy(new AesEncryptionStrategy());
+                    return;
+
+                default:
+                    Console.WriteLine("Please select a valid option.");
+                    break;
+
+            }
+
+        }
+    }
+    /// <summary>
+    /// Lets the user set the user that will access the file.
+    /// </summary>
+    /// <param name="file"> File object for which a user will be chosen. </param>
+    private static void SelectAndSetRole(Core.File file)
+    {
+        Console.WriteLine("Please enter a role if you want to enable role based access:");
+        string? role = Console.ReadLine();
+        if (role is not null && role is not "")
+        {
+            file.SetUser(role);
+        }      
+    }
 }
