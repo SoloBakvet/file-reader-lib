@@ -74,4 +74,13 @@ public class File(string filePath)
         }
         Console.WriteLine();
     }
+
+    /// <summary>
+    /// Sets decryption algorithm to use when operating on the file.
+    /// </summary>
+    /// <param name="strategy"> Encryption algorithm to use with the file. </param>
+    public void SetEncryptionStrategy(IEncryptionStrategy? strategy)
+    {
+        EncryptionStrategy = strategy;
+    }
 }
