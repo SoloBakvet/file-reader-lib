@@ -23,7 +23,6 @@ public class CommandLineInterface
                 if (filePath is not null && filePath is not "")
                 {
                     string fileExtension = Path.GetExtension(filePath);
-                    Console.WriteLine(fileExtension);
                     Core.File file = CreateFile(filePath,fileExtension);
                     file.PrintContent();
                 }

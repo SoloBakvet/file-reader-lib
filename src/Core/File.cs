@@ -1,4 +1,6 @@
-﻿using FileReaderLib.Encryption;
+﻿using FileReaderLib.AccessControl;
+using FileReaderLib.Encryption;
+using System.Security;
 
 namespace FileReaderLib.Core;
 
@@ -12,6 +14,10 @@ public class File(string filePath)
     /// </summary>
     public string FilePath { get; private set; } = filePath;
     /// <summary>
+    /// User who will access the file. 
+    /// </summary>
+    public string User { get; private set; } = "";
+    /// <summary>
     /// Encryption algorithm used to encrypt and decrypt the file.
     /// </summary>
     public IEncryptionStrategy? EncryptionStrategy { get; private set; } = null;
@@ -23,10 +29,17 @@ public class File(string filePath)
     /// <exception cref="FileNotFoundException"> </exception>
     /// <exception cref="PathTooLongException"> </exception>
     /// <exception cref="IOException"> </exception>
+    /// <exception cref="SecurityException"> </exception>
     public virtual byte[] LoadContent()
     {
         try
         {
+            // Checks if the user has access to the file.
+            AccessManager accessManager = AccessManager.Instance;
+            if(User is not "" && accessManager.HasAccesRights(FilePath, User) is false){
+                throw new SecurityException("Specified user has no access to the file.");
+            }
+
             using FileStream fs = new (FilePath, FileMode.Open, FileAccess.Read);
             byte[] fileContent = new byte[fs.Length];
             int numBytesToRead = (int)fs.Length;
@@ -48,10 +61,7 @@ public class File(string filePath)
             {
                 return EncryptionStrategy.Decrypt(fileContent);
             }
-            else
-            {
                 return fileContent;
-            }
         }
         catch
         {
@@ -65,6 +75,7 @@ public class File(string filePath)
     /// <exception cref="FileNotFoundException"> </exception>
     /// <exception cref="PathTooLongException"> </exception>
     /// <exception cref="IOException"> </exception>
+    /// <exception cref="SecurityException"> </exception>
     public virtual void PrintContent()
     {
         byte[] fileContent = LoadContent();
@@ -82,5 +93,14 @@ public class File(string filePath)
     public void SetEncryptionStrategy(IEncryptionStrategy? strategy)
     {
         EncryptionStrategy = strategy;
+    }
+
+    /// <summary>
+    /// Sets user to identify who will access the file.
+    /// </summary>
+    /// <param name="user"> The user that will access the file. </param>
+    public void SetUser(string user)
+    {
+        User = user;
     }
 }
