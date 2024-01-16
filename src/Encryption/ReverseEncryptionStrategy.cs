@@ -1,9 +1,7 @@
-﻿using System.Xml;
-
-namespace FileReaderLib.Encryption;
+﻿namespace FileReaderLib.Encryption;
 
 /// <summary>
-/// 
+/// Provides reverse input encryption and decryption.
 /// </summary>
 public class ReverseEncryptionStrategy : IEncryptionStrategy
 {

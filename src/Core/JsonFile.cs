@@ -1,26 +1,25 @@
-﻿using System.Xml;
+﻿using System.Text.Json;
 
 namespace FileReaderLib.Core;
 
 /// <summary>
-/// Provides base functionality to access a XML file. 
+/// Provides base functionality to access a JSON file. 
 /// </summary>
-public class XmlFile(string filePath) : TextFile(filePath)
+public class JsonFile(string filePath) : TextFile(filePath)
 {
     /// <summary>
     /// Loads content of the file into memory.
     /// </summary>
-    /// <returns>A XmlDocument object containing the content of the file.</returns>
     /// <exception cref="FileNotFoundException"> </exception>
     /// <exception cref="PathTooLongException"> </exception>
     /// <exception cref="IOException"> </exception>
-    /// <exception cref="XmlException"> </exception>
-    public new XmlDocument LoadContent()
+    /// <exception cref="JsonException"> </exception>
+    public new JsonDocument LoadContent()
     {
-        try {
+        try
+        {
             string fileContent = base.LoadContent();
-            XmlDocument document = new();
-            document.LoadXml(fileContent);
+            JsonDocument document = JsonDocument.Parse(fileContent);
             return document;
         }
         catch
@@ -35,15 +34,10 @@ public class XmlFile(string filePath) : TextFile(filePath)
     /// <exception cref="FileNotFoundException"> </exception>
     /// <exception cref="PathTooLongException"> </exception>
     /// <exception cref="IOException"> </exception>
-    /// <exception cref="XmlException"> </exception>
+    /// <exception cref="JsonException"> </exception>
     public override void PrintContent()
     {
-        XmlDocument fileContent = LoadContent();
-        using StringWriter stringWriter = new();
-        using XmlTextWriter xmlWriter = new(stringWriter);
-        xmlWriter.Formatting = Formatting.Indented;
-        fileContent.WriteTo(xmlWriter);
-        Console.WriteLine(stringWriter.ToString());
+        JsonDocument fileContent = LoadContent();
+        Console.WriteLine(fileContent.RootElement.GetRawText());
     }
 }
-

@@ -76,6 +76,9 @@ public class CommandLineInterface
             case ".xml":
                 return new XmlFile(filePath);
 
+            case ".json":
+                return new JsonFile(filePath);
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(fileExtension), "File type is not supported.");
 

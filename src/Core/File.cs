@@ -18,7 +18,7 @@ public class File(string filePath)
     /// </summary>
     public string User { get; private set; } = "";
     /// <summary>
-    /// Encryption algorithm used to encrypt and decrypt the file.
+    /// Cryptographic algorithm used to encrypt and decrypt the file.
     /// </summary>
     public IEncryptionStrategy? EncryptionStrategy { get; private set; } = null;
 
@@ -87,9 +87,9 @@ public class File(string filePath)
     }
 
     /// <summary>
-    /// Sets decryption algorithm to use when operating on the file.
+    /// Sets cryptographic algorithm to use when operating on the file.
     /// </summary>
-    /// <param name="strategy"> Encryption algorithm to use with the file. </param>
+    /// <param name="strategy"> Cryptographic algorithm to use with the file. </param>
     public void SetEncryptionStrategy(IEncryptionStrategy? strategy)
     {
         EncryptionStrategy = strategy;

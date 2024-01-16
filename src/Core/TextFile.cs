@@ -1,14 +1,15 @@
-﻿using FileReaderLib.Encryption;
-using System.Data;
-using System.Text;
+﻿using System.Text;
 
 namespace FileReaderLib.Core;
+
 /// <summary>
 /// Provides base functionality to access a text file. 
 /// </summary>
 public class TextFile(String filePath) : File(filePath)
 {
-
+    /// <summary>
+    /// Character encoding used for the text.
+    /// </summary>
     public Encoding FileEncoding { get; private set; } = Encoding.UTF8;
 
     /// <summary>
@@ -29,7 +30,6 @@ public class TextFile(String filePath) : File(filePath)
         {
             throw;
         }
-
     }
 
     /// <summary>

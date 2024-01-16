@@ -11,7 +11,7 @@ public sealed class AccessManager
     private static AccessManager? _Instance = null;
 
     /// <summary>
-    /// Retrieves the singleton instance of the class.
+    /// Retrieves the singleton instance of the class. !! Not thread-safe !!
     /// </summary>
     public static AccessManager Instance { 
         get
